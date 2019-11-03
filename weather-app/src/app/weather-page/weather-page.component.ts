@@ -20,10 +20,10 @@ export class WeatherPageComponent implements OnInit {
     )
   };
 
-  data: any = {};
-  myKey: string;
-  tempNow: any = {};
-  location: string;
+  data: any = {}; //Api response
+  myKey: string; //location ID
+  tempNow: any = {}; //the temperature right now
+  location: string; //location name
 
   constructor(
     public fb: FormBuilder,
@@ -35,15 +35,15 @@ export class WeatherPageComponent implements OnInit {
 
   ngOnInit() {
     this.useForm();
-    console.log(this.tempNow.length);
     this.route.params.subscribe((params: Params) => {
-      this.myKey = params["key"];
-      this.location = params["location"];
+      this.myKey = params["key"]; //default location ID
+      this.location = params["location"]; //default location name
     });
 
     return new Promise(resolve => {
       this.http
         .get(
+          //5 Days of Daily Forecasts
           "http://dataservice.accuweather.com/forecasts/v1/daily/5day/" +
             this.myKey +
             "?apikey=%09xtYjouqFGSNTAJEWVQoZ3zZ0IXAs1rEk"
@@ -51,12 +51,10 @@ export class WeatherPageComponent implements OnInit {
         .subscribe(data => {
           resolve(data);
           this.data = data;
-          console.log(data);
-          console.log(this.data.DailyForecasts[0].Day.Icon);
-          console.log(this.data.DailyForecasts[0].Temperature.Maximum.Value);
           return new Promise(resolve1 => {
             this.http
               .get(
+                //1 Hour of Hourly Forecasts
                 "http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/" +
                   this.myKey +
                   "?apikey=%09xtYjouqFGSNTAJEWVQoZ3zZ0IXAs1rEk"
@@ -64,7 +62,6 @@ export class WeatherPageComponent implements OnInit {
               .subscribe(data1 => {
                 resolve1(data1);
                 this.tempNow = data1;
-                console.log(this.tempNow[0]);
               });
           });
         });
@@ -82,37 +79,30 @@ export class WeatherPageComponent implements OnInit {
   }
 
   Serch() {
-    console.log(this.userForm.value.place);
+    //serch city
     var path =
       "http://dataservice.accuweather.com/locations/v1/search?apikey=xtYjouqFGSNTAJEWVQoZ3zZ0IXAs1rEk&q=";
     var userPath = path.concat(encodeURI(this.userForm.value.place));
-    console.log(userPath);
     return new Promise(resolve => {
       this.http.get(userPath).subscribe(
         data => {
           resolve(data);
-          console.log(data);
-          //console.log(data[0].LocalizedName);
           if (data == 0) {
             this.toastr.error("This city does not exist!", "Oops!");
             this.ResetForm();
           } else {
             this.location = data[0].LocalizedName;
             this.myKey = data[0].Key;
-            console.log(data);
-            console.log(data[0].Key);
             var forecasts =
               "http://dataservice.accuweather.com/forecasts/v1/daily/5day/";
             var forecastsCity = forecasts.concat(data[0].Key);
             var fiveDaysForecasts = forecastsCity.concat(
               "?apikey=xtYjouqFGSNTAJEWVQoZ3zZ0IXAs1rEk"
             );
-            console.log(fiveDaysForecasts);
             return new Promise(resolve1 => {
               this.http.get(fiveDaysForecasts).subscribe(data1 => {
                 resolve1(data1);
                 this.data = data1;
-                console.log(data1);
                 var forecastsNow =
                   "http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/";
                 var forecastsNowCity = forecastsNow.concat(data[0].Key);
@@ -123,7 +113,6 @@ export class WeatherPageComponent implements OnInit {
                   this.http.get(hourlyForecasts).subscribe(data2 => {
                     resolve2(data2);
                     this.tempNow = data2;
-                    console.log(data2);
                   });
                 });
               });
@@ -138,11 +127,11 @@ export class WeatherPageComponent implements OnInit {
   }
 
   addToFavorites() {
-    var temp = this.localStorageService.getAllList();
-    for (let i = 0; i < temp.length; i++) {
-      if (temp[i].key === this.myKey) {
+    var myFavoritesList = this.localStorageService.getAllList();
+    for (let i = 0; i < myFavoritesList.length; i++) {
+      if (myFavoritesList[i].key === this.myKey) {
         this.toastr.warning(
-          temp[i].location + " already in favorites.",
+          myFavoritesList[i].location + " already in favorites.",
           "Alert!"
         );
         this.ResetForm();

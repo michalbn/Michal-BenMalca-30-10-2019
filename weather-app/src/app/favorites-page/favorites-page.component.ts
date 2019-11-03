@@ -17,41 +17,31 @@ export class FavoritesPageComponent implements OnInit {
     private router: Router
   ) {}
 
-  information: any = [];
-  temp: any = [];
+  information: any = []; //Api response
+  myFavoritesList: any = []; //my favorites list from local storage
 
   ngOnInit() {
-    this.temp = this.localStorageService.getAllList();
-    console.log(this.temp);
+    this.myFavoritesList = this.localStorageService.getAllList();
     this.information = [];
-    // this.information.push({
-    //   DateTime: "2019-11-03T00:00:00+02:00",
-    //   EpochDateTime: 1572732000,
-    //   WeatherIcon: 33,
-    //   IconPhrase: "Clear",
-    //   HasPrecipitation: false
-    // });
 
     return new Promise(resolve => {
-      for (let i = 0; i < this.temp.length; i++) {
+      for (let i = 0; i < this.myFavoritesList.length; i++) {
         this.http
           .get(
+            //1 Hour of Hourly Forecasts
             "http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/" +
-              this.temp[i].key +
+              this.myFavoritesList[i].key +
               "?apikey=%09xtYjouqFGSNTAJEWVQoZ3zZ0IXAs1rEk"
           )
           .subscribe(data => {
             resolve(data);
-            console.log(data);
             this.information.push(data[0]);
           });
       }
-      console.log(this.information);
     });
   }
 
   removeCity(city) {
-    console.log(city);
     this.localStorageService.remove(city);
     this.ngOnInit();
   }
