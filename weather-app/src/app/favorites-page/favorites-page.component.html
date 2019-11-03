@@ -3,15 +3,22 @@
 
 <div
   *ngFor="
-    let row of temp.slice(
+    let row of myFavoritesList.slice(
       0,
-      (temp.length / 4) % 1 === 0 ? temp.length / 4 : temp.length / 4 + 1
+      (myFavoritesList.length / 4) % 1 === 0
+        ? myFavoritesList.length / 4
+        : myFavoritesList.length / 4 + 1
     );
     let idx = index
   "
 >
   <div class="row">
-    <span *ngFor="let x of temp.slice(idx * 4, idx * 4 + 4); let idy = index">
+    <span
+      *ngFor="
+        let x of myFavoritesList.slice(idx * 4, idx * 4 + 4);
+        let idy = index
+      "
+    >
       <div class="column">
         <button
           type="button"
@@ -22,7 +29,7 @@
             <span class="glyphicon glyphicon-remove"></span>
           </button>
           <br />
-          <div *ngIf="this.information.length == temp.length">
+          <div *ngIf="this.information.length == myFavoritesList.length">
             <h3>{{ x.location }}</h3>
             <div *ngIf="information[idx * 4 + idy].WeatherIcon > 10; else zero">
               <img

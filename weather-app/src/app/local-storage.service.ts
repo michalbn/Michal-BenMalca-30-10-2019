@@ -31,13 +31,7 @@ export class LocalStorageService {
       let key = localStorage.key(i);
       let value = JSON.parse(localStorage.getItem(key)).pop();
       temp[i] = { key: key, location: value.location };
-
-      //temp[key] = JSON.parse(value).pop();
-      //JSON.parse(temp[key]
-      // console.log(key, value);
     }
-
-    console.log(temp);
     return temp;
   }
 }

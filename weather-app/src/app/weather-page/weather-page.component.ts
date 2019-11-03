@@ -135,11 +135,12 @@ export class WeatherPageComponent implements OnInit {
           "Alert!"
         );
         this.ResetForm();
-        break;
-      } else {
-        this.localStorageService.storeOnLocalStorage(this.myKey, this.location);
+        return;
       }
     }
+
+    this.localStorageService.storeOnLocalStorage(this.myKey, this.location);
+    this.toastr.success("The city has been added to favorites!", "Success!");
   }
 
   ResetForm() {
