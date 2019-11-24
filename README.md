@@ -14,6 +14,6 @@ The API that i used for the app is "AccuWeather API".
 I used 3 endpoints: location autocomplete for the search field, get current weather and 5-day daily forecast. 
 
 
-
+![Home page (this one for is taken from basecamp - a project management service)](https://github.com/michalbn/weather-app/blob/master/weather-app-img.png)
 
 [Click here to watch the weather](https://michalbn.github.io/weather-app/home/215854/Tel%20Aviv)
