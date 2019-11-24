@@ -12,3 +12,8 @@ Favorites screen will be composed of a list of favorite locations. Each location
 ## API 
 The API that i used for the app is "AccuWeather API". 
 I used 3 endpoints: location autocomplete for the search field, get current weather and 5-day daily forecast. 
+
+
+
+
+[Click here to watch the weather](https://michalbn.github.io/weather-app/home)
