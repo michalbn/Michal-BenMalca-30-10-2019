@@ -16,4 +16,4 @@ I used 3 endpoints: location autocomplete for the search field, get current weat
 
 
 
-[Click here to watch the weather](https://michalbn.github.io/weather-app/home)
+[Click here to watch the weather](https://michalbn.github.io/weather-app/home/215854/Tel%20Aviv)
